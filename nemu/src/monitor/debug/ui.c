@@ -65,10 +65,10 @@ static int cmd_info(char *args) {
     printf("eip   0x%x\n", cpu.eip);
 
     for (int i=0; i<8; i++)
-      printf("%s   0x%x\n", regsw[i], reg_w(i));
+      printf("%s    0x%x\n", regsw[i], reg_w(i));
 
     for (int i=0; i<8; i++)
-      printf("%s   0x%x\n", regsb[i], reg_b(i));
+      printf("%s    0x%x\n", regsb[i], reg_b(i));
   } else if (c == 'w') {
     // todo
   } else {
@@ -82,7 +82,27 @@ static int cmd_p(char *args) {
 }
 
 static int cmd_x(char *args) {
-  return -1;
+  int n = 0;
+  vaddr_t addr;
+
+  if (args == NULL) {
+    printf("Invalid arguement.\n");
+    return 0;
+  }
+  if (sscanf(args, "%d 0x%x", &n, &addr) <= 0) {
+    printf("Invalid arguement.\n");
+    return 0;
+  }
+
+  printf("Memory:");
+  for (int i=0; i<n; i++) {
+    if (i%4)
+      printf("  0x%02x", vaddr_read(addr+i, 1));
+    else
+      printf("\n0x%x:  0x%02x", addr+i, vaddr_read(addr+i, 1));
+  }
+
+  return 0;
 }
 
 static int cmd_w(char *args) {
