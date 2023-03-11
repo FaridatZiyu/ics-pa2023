@@ -101,6 +101,7 @@ static int cmd_x(char *args) {
     else
       printf("\n0x%x:  0x%02x", addr+i, vaddr_read(addr+i, 1));
   }
+  printf("\n");
 
   return 0;
 }
