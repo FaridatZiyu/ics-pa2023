@@ -36,6 +36,38 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+static int cmd_si(char *args) {
+  uint64_t N = 1;
+  if (args != NULL) {
+    if (sscanf(args, "%lu", &N) <= 0) {
+      printf("Invalid arguement.\n");
+      return 0;
+    }
+  }
+  cpu_exec(N);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  return -1;
+}
+
+static int cmd_p(char *args) {
+  return -1;
+}
+
+static int cmd_x(char *args) {
+  return -1;
+}
+
+static int cmd_w(char *args) {
+  return -1;
+}
+
+static int cmd_d(char *args) {
+  return -1;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -46,8 +78,12 @@ static struct {
   { "help", "Display informations about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
-  /* TODO: Add more commands */
+  { "si", "Execute N steps, usage: si N", cmd_si },
+  { "info", "Print registers or watchpoints, usage: info r/w", cmd_info },
+  { "p", "Compute the value of expression, usage: p EXPR", cmd_p },
+  { "x", "Scan the memory, usage: x N EXPR", cmd_x },
+  { "w", "Set watchpoint, usage: w EXPR", cmd_w },
+  { "d", "Delete watchpoint No.N, usage: d N", cmd_d },
 
 };
 
