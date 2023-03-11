@@ -78,7 +78,15 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_p(char *args) {
-  return -1;
+  bool b;
+  int r = expr(args, &b);
+  
+  if (b)
+    printf("%d\n", r);
+  else
+    printf("Syntax error.\n");
+  
+  return 0;
 }
 
 static int cmd_x(char *args) {
