@@ -49,7 +49,32 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
-  return -1;
+  char c;
+  if (args == NULL) {
+    printf("Invalid arguement.\n");
+    return 0;
+  }
+  if (sscanf(args, "%c", &c) <= 0) {
+    printf("Invalid arguement.\n");
+    return 0;
+  }
+
+  if (c == 'r') {
+    for (int i=0; i<8; i++)
+      printf("%s   0x%x\n", regsl[i], reg_l(i));
+    printf("eip   0x%x\n", cpu.eip);
+
+    for (int i=0; i<8; i++)
+      printf("%s   0x%x\n", regsw[i], reg_w(i));
+
+    for (int i=0; i<8; i++)
+      printf("%s   0x%x\n", regsb[i], reg_b(i));
+  } else if (c == 'w') {
+    // todo
+  } else {
+    printf("Invalid arguement.\n");
+  }
+  return 0;
 }
 
 static int cmd_p(char *args) {
