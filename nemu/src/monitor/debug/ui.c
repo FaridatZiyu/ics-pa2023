@@ -60,13 +60,14 @@ static int cmd_info(char *args) {
   }
 
   if (c == 'r') {
+    // DWORD
     for (int i=0; i<8; i++)
       printf("%s   0x%x\n", regsl[i], reg_l(i));
     printf("eip   0x%x\n", cpu.eip);
-
+    // WORD
     for (int i=0; i<8; i++)
       printf("%s    0x%x\n", regsw[i], reg_w(i));
-
+    // BYTE
     for (int i=0; i<8; i++)
       printf("%s    0x%x\n", regsb[i], reg_b(i));
   } else if (c == 'w') {
@@ -92,6 +93,8 @@ static int cmd_p(char *args) {
 static int cmd_x(char *args) {
   int n = 0;
   vaddr_t addr;
+  char* nRetStr = strtok(args, " ");
+  char* exprStr = strtok(NULL, " ");
 
   if (args == NULL) {
     printf("Invalid arguement.\n");
@@ -102,6 +105,12 @@ static int cmd_x(char *args) {
     return 0;
   }
 
+  bool b;
+  addr = expr(exprStr, &b);
+  if (!b) {
+    printf("Syntax error.\n");
+    return 0;
+  }
   printf("Memory:");
   for (int i=0; i<n; i++) {
     if (i%4)
