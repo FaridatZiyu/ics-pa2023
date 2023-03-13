@@ -71,7 +71,7 @@ static int cmd_info(char *args) {
     for (int i=0; i<8; i++)
       printf("%s    0x%x\n", regsb[i], reg_b(i));
   } else if (c == 'w') {
-    // todo
+    print_wp();
   } else {
     printf("Invalid arguement.\n");
   }
