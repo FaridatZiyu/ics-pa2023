@@ -55,4 +55,33 @@ bool new_wp(char *args) {
   return true;
 }
 
+bool free_wp(int num) {
+  WP* thewp = NULL;
+  if (head == NULL) {
+    printf("No watchpoint now\n");
+    return false;
+  }
+
+  if (head->NO == num) {
+    thewp = head;
+    head = head->next;
+  } else {
+    wptemp = head;
+    while (wptemp!=NULL && wptemp->next!=NULL) {
+      if (wptemp->next->NO == num) {
+        thewp = wptemp->next;
+        wptemp->next = wptemp->next->next;
+        break;
+      }
+      wptemp = wptemp->next;
+    }
+  }
+
+  if (thewp != NULL) {
+    thewp->next = free_;
+    free_ = thewp;
+    return true;
+  }
+  return false;
+}
 
