@@ -85,3 +85,17 @@ bool free_wp(int num) {
   return false;
 }
 
+void print_wp() {
+  if (head == NULL) {
+    printf("No watchpoint now\n");
+    return;
+  }
+  printf("Watchpoints:\n");
+  printf("NO.   expr            hitTimes\n");
+  wptemp = head;
+  while (wptemp) {
+    printf("%d     %s          %d\n", wptemp->NO, wptemp->e, wptemp->hitNum);
+    wptemp = wptemp->next;
+  }
+}
+
