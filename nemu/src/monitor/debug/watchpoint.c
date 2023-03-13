@@ -23,6 +23,36 @@ void init_wp_pool() {
   used_next = 0;
 }
 
-/* TODO: Implement the functionality of watchpoint */
+bool new_wp(char *args) {
+  if (free_ == NULL)
+    assert(0);
+  
+  WP* rst = free_;
+  free_ = free_->next;
+
+  rst->NO = used_next++;
+  rst->next = NULL;
+  strcpy(rst->e, args);
+  rst->hitNum = 0;
+
+  bool b;
+  rst->oldValue = expr(rst->e, &b);
+  if (!b) {
+    printf("Syntax error.\n");
+    return false;
+  }
+
+  wptemp = head;
+  if (wptemp == NULL) {
+    head = rst;
+  } else {
+    while (wptemp->next != NULL)
+      wptemp = wptemp->next;
+    wptemp->next = rst;
+  }
+
+  printf("Success: set watchpoint %d, oldValue=%d\n", rst->NO, rst->oldValue);
+  return true;
+}
 
 
