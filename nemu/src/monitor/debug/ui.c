@@ -129,7 +129,17 @@ static int cmd_w(char *args) {
 }
 
 static int cmd_d(char *args) {
-  return -1;
+  int num = 0;
+  if (sscanf(args, "%d", &num) <= 0) {
+    printf("Invalid argument.\n");
+    return 0;
+  }
+
+  if (free_wp(num))
+    printf("Successfully deleted watchpoint %d\n", num);
+  else
+    printf("Error: no watchpoint %d\n", num);
+  return 0;
 }
 
 static int cmd_help(char *args);
