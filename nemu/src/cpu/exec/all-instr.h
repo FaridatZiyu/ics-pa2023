@@ -1,11 +1,13 @@
 #include "cpu/exec.h"
 
+// special.c
+make_EHelper(nop);
+make_EHelper(inv);
+make_EHelper(nemu_trap);
+
 // prefix.c
 make_EHelper(real);
 make_EHelper(operand_size);
-
-make_EHelper(inv);
-make_EHelper(nemu_trap);
 
 // data-mov.c
 make_EHelper(mov);
@@ -43,3 +45,14 @@ make_EHelper(imul2);
 make_EHelper(imul3);
 make_EHelper(div);
 make_EHelper(idiv);
+
+// logic.c
+make_EHelper(test);
+make_EHelper(and);
+make_EHelper(xor);
+make_EHelper(or);
+make_EHelper(sar);
+make_EHelper(shl);
+make_EHelper(shr);
+make_EHelper(setcc);
+make_EHelper(not);
