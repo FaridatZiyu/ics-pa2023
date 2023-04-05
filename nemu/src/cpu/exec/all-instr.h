@@ -56,3 +56,13 @@ make_EHelper(shl);
 make_EHelper(shr);
 make_EHelper(setcc);
 make_EHelper(not);
+
+// system.c
+
+make_EHelper(lidt);
+make_EHelper(mov_r2cr);
+make_EHelper(mov_cr2r);
+make_EHelper(int);
+make_EHelper(iret);
+make_EHelper(in);
+make_EHelper(out);
