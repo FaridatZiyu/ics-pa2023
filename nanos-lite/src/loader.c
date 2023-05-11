@@ -8,6 +8,7 @@ extern uint8_t ramdisk_end;
 extern void ramdisk_read(void *buf, off_t offser, size_t len);
 
 uintptr_t loader(_Protect *as, const char *filename) {
+  printf("here.\n");
   ramdisk_read(DEFAULT_ENTRY, 0, RAMDISK_SIZE);
   return (uintptr_t)DEFAULT_ENTRY;
 }
