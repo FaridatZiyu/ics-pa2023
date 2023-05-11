@@ -3,6 +3,6 @@
 
 #include "common.h"
 
-enum {SEEK_SET, SEEK_CUR, SEEK_END};
+// enum {SEEK_SET, SEEK_CUR, SEEK_END};
 
 #endif
