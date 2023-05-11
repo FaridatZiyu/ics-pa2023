@@ -38,6 +38,7 @@ make_EHelper(mov_cr2r) {
 
 extern void raise_intr(uint8_t NO, vaddr_t ret_addr);
 make_EHelper(int) {
+  TODO();
   uint8_t NO = id_dest->val & 0xff;
   raise_intr(NO, decoding.seq_eip);
 
