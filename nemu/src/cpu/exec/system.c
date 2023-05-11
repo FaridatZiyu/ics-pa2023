@@ -4,6 +4,7 @@ void diff_test_skip_qemu();
 void diff_test_skip_nemu();
 
 make_EHelper(lidt) {
+  printf("lidt\n");
   t1 = id_dest->val;
   rtl_lm(&t0, &t1, 2);
   cpu.idtr.limit = t0;
