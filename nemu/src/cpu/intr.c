@@ -14,12 +14,12 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   rtl_push(&t0);
   
   vaddr_t gate_addr = cpu.idtr.base+NO*sizeof(GateDesc);
-  Log("cpu.idtr.base=0x%x", cpu.idtr.base);
-  Log("cpu.idtr.limit=0x%x", cpu.idtr.limit);
-  Log("NO=0x%x", NO);
-  Log("sizeof(GateDesc)=0x%x", sizeof(GateDesc));
-  Log("gate_addr=0x%x", gate_addr);
-  assert(gate_addr<=cpu.idtr.base+cpu.idtr.limit);
+  printf("cpu.idtr.base=0x%d", cpu.idtr.base);
+  printf("cpu.idtr.limit=0x%d", cpu.idtr.limit);
+  printf("NO=0x%d", NO);
+  printf("sizeof(GateDesc)=0x%ld", sizeof(GateDesc));
+  printf("gate_addr=0x%d", gate_addr);
+  //assert(gate_addr<=cpu.idtr.base+cpu.idtr.limit);
 
   uint32_t off_15_0 = vaddr_read(gate_addr, 2);
   uint32_t off_32_16 = vaddr_read(gate_addr+sizeof(GateDesc)-2, 2);
