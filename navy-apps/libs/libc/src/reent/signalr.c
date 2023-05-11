@@ -21,7 +21,7 @@ int _dummy_link_syscalls = 1;
 
 /* We use the errno variable used by the system dependent layer.  */
 #undef errno
-int signalr_errno;
+int errno;
 
 /*
 FUNCTION
@@ -55,10 +55,10 @@ _kill_r (ptr, pid, sig)
 {
   int ret;
 
-  signalr_errno = 0;
+  errno = 0;
   ret = _kill (pid, sig);
-  if (signalr_errno != 0)
-    ptr->_errno = signalr_errno;
+  if (errno != 0)
+    ptr->_errno = errno;
   return ret;
 }
 
