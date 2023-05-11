@@ -30,6 +30,7 @@ int main() {
 
   init_fs();
 
+  printf("here.\n");
   uint32_t entry = loader(NULL, NULL);
   ((void (*)(void))entry)();
 
