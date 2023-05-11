@@ -14,6 +14,7 @@ void raise_intr(uint8_t NO, vaddr_t ret_addr) {
   rtl_push(&t0);
   
   vaddr_t gate_addr = cpu.idtr.base+NO*sizeof(GateDesc);
+  printf("gate_addr=0x%x\n", gate_addr);
   printf("idtr.limit=0x%x\n", cpu.idtr.limit);
   printf("idtr.base=O×%x\n", cpu.idtr.base);
   assert(gate_addr<=cpu.idtr.base+cpu.idtr.limit);

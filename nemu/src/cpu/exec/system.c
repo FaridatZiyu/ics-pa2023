@@ -14,7 +14,7 @@ make_EHelper(lidt) {
   
 #ifdef DEBUG
   Log("idtr.limit=0x%x", cpu.idtr.limit);
-  Log("idtr.base=O×%x", cpu.idtr.base);
+  Log("idtr.base=0×%x", cpu.idtr.base);
 #endif
 
   print_asm_template1(lidt);
