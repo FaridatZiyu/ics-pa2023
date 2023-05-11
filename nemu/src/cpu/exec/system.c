@@ -11,9 +11,6 @@ make_EHelper(lidt) {
   t1 = id_dest->val+2;
   rtl_lm(&t0, &t1, 4);
   cpu.idtr.base = t0;
-
-  printf("idtr.limit=0x%x", cpu.idtr.limit);
-  printf("idtr.base=O×%x", cpu.idtr.base);
   
 #ifdef DEBUG
   Log("idtr.limit=0x%x", cpu.idtr.limit);
