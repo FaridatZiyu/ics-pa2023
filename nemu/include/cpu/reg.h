@@ -48,8 +48,8 @@ typedef struct {
   } eflags;
 
   struct IDTR {
-    uint32_t base:8;
-    uint16_t limit:8;
+    uint32_t base;
+    uint16_t limit;
   } idtr;
   
   rtlreg_t cs;
