@@ -13,11 +13,13 @@ static inline _RegSet* sys_exit(_RegSet *r) {
 
 static inline _RegSet* sys_write(_RegSet *r) {
   int fd = (int)SYSCALL_ARG2(r);
-  char* buf = (char*)SYSCALL_ARG3(r);
+  void* buf = (void*)SYSCALL_ARG3(r);
   size_t count = (size_t)SYSCALL_ARG4(r);
   if (fd == 1 || fd == 2) {
+    char c;
     for(int i = 0; i < count; i++){
-      _putc(buf[i]);
+      memcpy(&c, buf+i, 1);
+      _putc(c);
     }
     SYSCALL_ARG1(r) = count;
   } else {
