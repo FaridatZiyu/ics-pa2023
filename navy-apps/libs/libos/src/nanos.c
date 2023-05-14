@@ -29,10 +29,9 @@ int _write(int fd, void *buf, size_t count){
   return _syscall_(SYS_write, fd, (uintptr_t)buf, count);
 }
 
+extern char end;
+static uintptr_t probreak = (uintptr_t)&end;
 void *_sbrk(intptr_t increment){
-  extern end;
-  static uintptr_t probreak = (uintptr_t)&end;
-
   uintptr_t probreak_new = probreak + increment;
   int r = _syscall_(SYS_brk, probreak_new, 0, 0);
   if (r == 0) {
