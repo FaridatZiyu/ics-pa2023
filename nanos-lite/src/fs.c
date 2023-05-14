@@ -52,9 +52,9 @@ void set_open_offset(int fd, off_t n) {
   file_table[fd].open_offset = n;
 }
 
-int fs_open(const char* filenane, int flags, int mode) {
+int fs_open(const char* filename, int flags, int mode) {
   for(int i=0; i<NR_FILES; i++) {
-    if(strcmp(filenane, file_table[i].name)==0)
+    if(strcmp(filename, file_table[i].name)==0)
       return i;
   }
   panic("This filename not exist in file_table");
