@@ -29,7 +29,6 @@ static inline _RegSet* sys_write(_RegSet *r) {
 
 static inline _RegSet* sys_brk(_RegSet *r) {
   // SYSCALL_ARG1(r) = mm_brk((uint32_t)SYSCALL_ARG2(r));
-  Log("here.");
   SYSCALL_ARG1(r) = 0;
   return NULL;
 }

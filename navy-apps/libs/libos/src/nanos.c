@@ -35,6 +35,8 @@ void *_sbrk(intptr_t increment){
   uintptr_t probreak_new = probreak + increment;
   int r = _syscall_(SYS_brk, probreak_new, 0, 0);
   if (r == 0) {
+
+  Log("here.");
     uintptr_t temp = probreak;
     probreak = probreak_new;
     return (void *)temp;
