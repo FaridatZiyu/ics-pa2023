@@ -100,7 +100,7 @@ ssize_t fs_write(int fd, void* buf, size_t len) {
   if (fd == FD_FB)
     fb_write(buf, get_open_offset(fd), n);
   else
-    ramdisk_read(buf, disk_offset(fd)+get_open_offset(fd), n);
+    ramdisk_write(buf, disk_offset(fd)+get_open_offset(fd), n);
   set_open_offset(fd, get_open_offset(fd)+n);
   return n;
 }
