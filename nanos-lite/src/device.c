@@ -19,11 +19,9 @@ void dispinfo_read(void *buf, off_t offset, size_t len) {
 }
 
 void fb_write(const void *buf, off_t offset, size_t len) {
-  int index = offset / 4;
-  int screen_y1 = index / _screen.width;
-  int screen_x1 = index % _screen.width;
-  index = (offset+len)/4;
-  int screen_y2 = index / _screen.width;
+  int screen_y1 = offset / 4 / _screen.width;
+  int screen_x1 = offset / 4 % _screen.width;
+  int screen_y2 = (offset+len) / 4 / _screen.width;
   if(screen_y2 == screen_y1){  
     _draw_rect(buf, screen_x1, screen_y1, len/4, 1);
     return;
