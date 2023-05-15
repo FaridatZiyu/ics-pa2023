@@ -85,18 +85,20 @@ ssize_t fs_read(int fd, void* buf, size_t len) {
   return n;
 }
 
+void fb_write(const void *buf, off_t offset, size_t len);
+
 ssize_t fs_write(int fd, void* buf, size_t len) {
   assert(fd>=0 && fd<NR_FILES);
-  if (fd < 3 || fd==FD_FB) {
-    Log("arg invaid:fd<3 || fd==FD_FB");
+  if (fd < 3 || fd==FD_DISPINFO) {
+    Log("arg invaid:fd<3 || fd==FD_DISPINFO");
     return 0;
   }
   int n = fs_filesz(fd) - get_open_offset(fd);
   if (n > len)
     n = len;
 
-  if (fd == FD_DISPINFO)
-    dispinfo_read(buf, get_open_offset(fd), n);
+  if (fd == FD_FB)
+    fb_write(buf, get_open_offset(fd), n);
   else
     ramdisk_read(buf, disk_offset(fd)+get_open_offset(fd), n);
   set_open_offset(fd, get_open_offset(fd)+n);
