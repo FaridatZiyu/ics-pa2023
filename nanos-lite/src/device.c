@@ -9,15 +9,52 @@ static const char *keyname[256] __attribute__((used)) = {
 };
 
 size_t events_read(void *buf, size_t len) {
+  char str[20];
+  bool down = false;
+  int key = _read_key();
+  if (key & 0x8000) {
+    key ^= 0x8000;
+    down = true;
+  }
+  if (key != _KEY_NONE)
+    sprintf(str, "%s %s\n", down?"kd":"ku", keyname[key]);
+  else
+    sprintf(str, "t%d\n", _uptime());
+  
+  if (strlen(str) <= len) {
+    strncpy((char*)buf, str, strlen(str));
+    return strlen(str);
+  }
+  Log("strlen(event)>len,return 0");
   return 0;
 }
 
 static char dispinfo[128] __attribute__((used));
 
 void dispinfo_read(void *buf, off_t offset, size_t len) {
+  strncpy(buf, dispinfo+offset, len);
 }
 
 void fb_write(const void *buf, off_t offset, size_t len) {
+  int screen_y1 = offset / 4 / _screen.width;
+  int screen_x1 = offset / 4 % _screen.width;
+  int screen_y2 = (offset+len) / 4 / _screen.width;
+  if(screen_y2 == screen_y1){  
+    _draw_rect(buf, screen_x1, screen_y1, len/4, 1);
+    return;
+  }
+
+  int tempw = _screen.width - screen_x1;
+  if(screen_y2 - screen_y1 == 1) {
+    _draw_rect(buf, screen_x1, screen_y1, tempw, 1);
+    _draw_rect(buf+tempw*4, 0, screen_y2, len/4-tempw, 1);
+    return;
+  }
+  
+  _draw_rect(buf, screen_x1, screen_y1, tempw, 1);
+  int tempy = screen_y2 - screen_y1 - 1;
+  _draw_rect(buf+tempw*4, 0, screen_y1+1, _screen.width, tempy);
+  _draw_rect(buf+tempw*4+tempy*_screen.width*4, 0, screen_y2, len/4-tempw-tempy*_screen.width, 1);
 }
 
 void init_device() {
@@ -25,4 +62,5 @@ void init_device() {
 
   // TODO: print the string to array `dispinfo` with the format
   // described in the Navy-apps convention
+  sprintf(dispinfo, "WIDTH:%d\nHEIGHT:%d\n", _screen.width, _screen.height);
 }

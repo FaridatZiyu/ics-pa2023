@@ -27,7 +27,8 @@ extern void ramdisk_write(void *buf, off_t offset, size_t len);
 
 void init_fs() {
   // TODO: initialize the size of /dev/fb
-  file_table[FD_FB].size = _screen.height * _screen.width * 4;
+  file_table[FD_FB].size = _screen.height * _screen.width * sizeof(uint32_t);
+  Log("FD_FB size = %d", file_table[FD_FB].size);
 }
 
 size_t fs_filesz(int fd) {
@@ -56,6 +57,7 @@ void set_open_offset(int fd, off_t n) {
 int fs_open(const char* filename, int flags, int mode) {
   for(int i=0; i<NR_FILES; i++) {
     if(strcmp(filename, file_table[i].name)==0) {
+      Log("loading %s", filename);
       file_table[i].open_offset = 0;
       return i;
     }
@@ -64,18 +66,67 @@ int fs_open(const char* filename, int flags, int mode) {
   return -1;
 }
 
+void dispinfo_read(void* buf, off_t offset, size_t len);
+size_t events_read(void *buf, size_t len);
+
 ssize_t fs_read(int fd, void* buf, size_t len) {
   assert(fd>=0 && fd<NR_FILES);
-  if(fd < 3) {
-    Log("arg invaid:fd<3");
+  if (fd < 3 || fd==FD_FB) {
+    Log("arg invaid:fd<3 || fd==FD_FB");
+    return 0;
+  }
+
+  if (fd == FD_EVENTS) {
+    return events_read(buf, len);
+  }
+
+  int n = fs_filesz(fd) - get_open_offset(fd);
+  if (n > len)
+    n = len;
+
+  if (fd == FD_DISPINFO)
+    dispinfo_read(buf, get_open_offset(fd), n);
+  else
+    ramdisk_read(buf, disk_offset(fd)+get_open_offset(fd), n);
+  set_open_offset(fd, get_open_offset(fd)+n);
+  return n;
+}
+
+void fb_write(const void *buf, off_t offset, size_t len);
+
+ssize_t fs_write(int fd, void* buf, size_t len) {
+  assert(fd>=0 && fd<NR_FILES);
+  if (fd < 3 || fd==FD_DISPINFO) {
+    Log("arg invaid:fd<3 || fd==FD_DISPINFO");
     return 0;
   }
   int n = fs_filesz(fd) - get_open_offset(fd);
-  if(n > len)
+  if (n > len)
     n = len;
-  ramdisk_read(buf, disk_offset(fd)+get_open_offset(fd), n);
+
+  if (fd == FD_FB)
+    fb_write(buf, get_open_offset(fd), n);
+  else
+    ramdisk_write(buf, disk_offset(fd)+get_open_offset(fd), n);
   set_open_offset(fd, get_open_offset(fd)+n);
   return n;
+}
+
+off_t fs_lseek(int fd, off_t offset, int whence) {
+  switch(whence) {
+  case SEEK_SET:
+    set_open_offset(fd, offset);
+    return get_open_offset(fd);
+  case SEEK_CUR:
+    set_open_offset(fd, get_open_offset(fd)+offset);
+    return get_open_offset(fd);
+  case SEEK_END:
+    set_open_offset(fd, fs_filesz(fd)+offset);
+    return get_open_offset(fd);
+  default:
+    panic("Unhandled whence ID = %d", whence);
+    return -1;
+  }
 }
 
 int fs_close(int fd) {
