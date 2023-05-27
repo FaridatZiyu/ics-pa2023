@@ -83,5 +83,25 @@ void _unmap(_Protect *p, void *va) {
 }
 
 _RegSet *_umake(_Protect *p, _Area ustack, _Area kstack, void *entry, char *const argv[], char *const envp[]) {
-  return NULL;
+  uint32_t *ptr = ustack.end;
+  for(int i = 0; i < 8; i++) {
+    *ptr = 0x0;
+    ptr--;
+  }
+  *ptr = 0x2 | (1<<9); // tf->eflags
+  ptr--;
+  *ptr = 0x8; // tf->cs
+  ptr--;
+  *ptr = (uint32_t)entry; // tf->eip;
+  ptr--;
+  *ptr = 0x0; // tf->error_code
+  ptr--;
+  *ptr = 0x81; // tf->irq
+  ptr--;
+  for (int i = 0; i < 8; i++) {
+    *ptr = 0x0;
+    ptr--;
+  } // tf->eax---tf->edi
+  ptr++;
+  return (_RegSet *)ptr; 
 }
